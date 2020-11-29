@@ -10,12 +10,9 @@ var step = async function() {
     await rabbitMQClient.connect()
     await rabbitMQClient.createQueue(config.rabbitmq.queue)
     console.log('Temos de consumir aqui')
-    await rabbitMQClient.consumer(config.rabbitmq.queue, (message) => {
-      console.log('Imprime essa treta')
-      console.log(message)
-      psqlInterface.connect()
-      psqlInterface.parseMessage(message)
-    })
+    let message = await rabbitMQClient.consumer(config.rabbitmq.queue)
+    console.log('Mensagem no consumer')
+    console.log(message)
   } catch (error) {
     console.error(error)
     throw new Error('Isso nao deveria dar ruim')

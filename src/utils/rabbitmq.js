@@ -62,13 +62,17 @@ class RabbitMQHelper {
   }
 
 
-  async consumer(queueName, callback) {
+  async consumer(queueName) {
     if (!this.queueExists(queueName)) {
       throw new Error ('Queue not created')
     }
     await this.channels[queueName].assertQueue(queueName, {durable: true})
     await this.channels[queueName].bindQueue(queueName, queueName, '')
-    await this.channels[queueName].consume(queueName, callback, {noAck: false})
+    return awaitthis.channels[queueName].consume(queueName, function (message) {
+      if (message !== null) {
+        console.log(message)
+      }
+    }, {noAck: false})
   }
 
   ackMessage (queueName, message) {
