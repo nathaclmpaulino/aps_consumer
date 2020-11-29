@@ -10,7 +10,8 @@ class RabbitMQHelper {
   async connect () {
     const brokerUrl = `${config.rabbitmq.protocol}://${config.rabbitmq.username}:${config.rabbitmq.password}@${config.rabbitmq.host}:${config.rabbitmq.port}`
     try {
-      console.log('Trying to connect at RabbitMQ')
+      console.log('Trying to connect at RabbitMQ at')
+      console.log(brokerUrl)
       this.conn = await amqp.connect(brokerUrl)
       this.channels = {}
     } catch (error) {
