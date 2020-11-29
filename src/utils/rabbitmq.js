@@ -68,11 +68,11 @@ class RabbitMQHelper {
     }
     await this.channels[queueName].assertQueue(queueName, {durable: true})
     await this.channels[queueName].bindQueue(queueName, queueName, '')
-    return awaitthis.channels[queueName].consume(queueName, function (message) {
+    return await this.channels[queueName].consume(queueName, function (message) {
       if (message !== null) {
-        console.log(message)
+        console.log(message.content.toString())
       }
-    }, {noAck: false})
+    })
   }
 
   ackMessage (queueName, message) {
