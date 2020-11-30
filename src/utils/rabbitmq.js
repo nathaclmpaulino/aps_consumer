@@ -71,6 +71,7 @@ class RabbitMQHelper {
     return await this.channels[queueName].consume(queueName, function (message) {
       if (message !== null) {
         console.log(message.content.toString())
+        return message.content.toString()
       }
     })
   }

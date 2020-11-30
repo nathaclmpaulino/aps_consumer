@@ -5,9 +5,10 @@ metadata:
   namespace: default
 data:
   RABBITMQ_QUEUE: 'HeatSensor'
-  RABBITMQ_HOST: rabbitmq-broker:5672
+  RABBITMQ_HOST: rabbitmq-broker
   RABBITMQ_PORT: "5672"
   RABBITMQ_PROTOCOL: "amqp"
+  POSTGRES_HOST: 'psql-database'
   PORT: "3001"
   FREQUENCY: "50000"
 ---

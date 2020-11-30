@@ -20,6 +20,7 @@ class PSQLInterface {
       let client = await this.pool.connect()          
       this.client = client
     } catch (error) {
+      console.log(error)
       throw new Error('Unable to connect over PSQL.')
     }
   }
@@ -44,7 +45,7 @@ class PSQLInterface {
 
   async insertIntoTable(argValues) {
     try {
-      await this.pool.query('INSERT INTO lights_sensor(time, day, light, temperature, humidity, motion) VALUES($1, $2, $3, $4, $5, $6', [argValues[0], argValues[1], argValues[2], argValues[3], argValues[4], argValues[5]])
+      await this.pool.query('INSERT INTO heat_sensor(time, day, light, temperature, humidity, motion) VALUES($1, $2, $3, $4, $5, $6', [argValues[0], argValues[1], argValues[2], argValues[3], argValues[4], argValues[5]])
     } catch (error) {
       throw new Error('Unable to insert data into table')
     }  
