@@ -1,4 +1,5 @@
 const config         = require('../config/config')
+const psqlInterface  = require('./psql')
 const amqp           = require('amqplib')
 
 class RabbitMQHelper {
@@ -68,11 +69,9 @@ class RabbitMQHelper {
     }
     await this.channels[queueName].assertQueue(queueName, {durable: true})
     await this.channels[queueName].bindQueue(queueName, queueName, '')
-    return await this.channels[queueName].consume(queueName, function (message) {
-      if (message !== null) {
-        console.log(message.content.toString())
-        return message.content.toString()
-      }
+    return await this.channels[queueName].consume(queueName, async (message) => {
+      let string = message.content.toString()
+      console.log(JSON.parse(string).size())
     })
   }
 
