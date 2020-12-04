@@ -55,11 +55,11 @@ class RabbitMQHelper {
    * @param {Buffer} message 
   */
   
-  publish (queueName, message) {
+  async publish (queueName, message) {
     if (!this.queueExists(queueName)) {
       throw new Error ('Queue not created')
     }
-    this.channels[queueName].publish(queueName, '', message)
+    await this.channels[queueName].sendToQueue(queueName, Buffer.from(JSON.stringify(message)))
   }
 
 
@@ -69,9 +69,15 @@ class RabbitMQHelper {
     }
     await this.channels[queueName].assertQueue(queueName, {durable: true})
     await this.channels[queueName].bindQueue(queueName, queueName, '')
-    return await this.channels[queueName].consume(queueName, async (message) => {
-      let string = message.content.toString()
-      console.log(JSON.parse(string).size())
+    await this.channels[queueName].consume(queueName, async (message) => {
+      let points = JSON.parse(message.content.toString())
+      await psqlInterface.connect()
+      const promises = points.map(async (point) => {
+        await psqlInterface.insertIntoTable([point.timestamp, point.day, point.light, point.temperature, point.humidity, point.motion])
+      })
+      await Promise.all(promises)
+      console.log('Points inserted over DB!')
+      this.ackMessage(queueName, message)
     })
   }
 

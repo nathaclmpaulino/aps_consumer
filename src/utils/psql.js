@@ -25,19 +25,6 @@ class PSQLInterface {
     }
   }
 
-  /** 
-   * @param {String} message 
-   */
-
-  parseMessage(message) {    
-    /*
-      Em um array argValues, as seis posições do array representam as 6 colunas da tabela 
-      no banco de dados
-    */
-    console.log(message)
-    //return argValues
-  }
-
   /**
    * @param {String} tableName 
    * @param {Array} argValues 
@@ -45,8 +32,9 @@ class PSQLInterface {
 
   async insertIntoTable(argValues) {
     try {
-      await this.pool.query('INSERT INTO heat_sensor(time, day, light, temperature, humidity, motion) VALUES($1, $2, $3, $4, $5, $6', [argValues[0], argValues[1], argValues[2], argValues[3], argValues[4], argValues[5]])
+      await this.pool.query('INSERT INTO heat_sensor(time, day, light, temperature, humidity, motion) VALUES ($1, $2, $3, $4, $5, $6);', [argValues[0], argValues[1], argValues[2], argValues[3], argValues[4], argValues[5]])
     } catch (error) {
+      console.log(error)
       throw new Error('Unable to insert data into table')
     }  
   }
